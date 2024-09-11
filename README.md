@@ -4,9 +4,9 @@
 
 ### SYNOPSIS
 
-- zgrep [OPTIONS...] <pattern\> <path\>
-- zgrep <pattern\> [OPTIONS...] <path\>
-- zgrep <pattern\> <path\> [OPTIONS...]
+- grep [OPTIONS...] <pattern\> <path\>
+- grep <pattern\> [OPTIONS...] <path\>
+- grep <pattern\> <path\> [OPTIONS...]
 
 ### OPTIONS
 
