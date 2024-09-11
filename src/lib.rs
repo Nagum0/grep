@@ -95,13 +95,21 @@ impl Grep {
             println!(
                 "{}",
                 file_paths.iter().try_fold(0, |acc, file_path| {
-                    let matches = utils::count_matches(&file_path, &self.pattern)?;
-                    Ok::<usize, GrepError>(acc + matches)
+                    match utils::count_matches(&file_path, &self.pattern) {
+                        Ok(matches) => Ok(acc + matches),
+                        Err(e) => {
+                            println!("{e}");
+                            Ok(acc)
+                        }
+                    }
                 })?
             );
         } else {
             for file_path in file_paths {
-                utils::get_matches(&file_path, &self.pattern, self.config.lines, true)?;
+                match utils::get_matches(&file_path, &self.pattern, self.config.lines, true) {
+                    Ok(_) => {}
+                    Err(e) => println!("{e}"),
+                }
             }
         }
 
