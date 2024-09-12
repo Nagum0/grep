@@ -4,6 +4,7 @@ pub struct Config {
     pub recursive: bool,
     pub full_recursive: bool,
     pub count: bool,
+    pub error: bool,
 }
 
 impl Config {
@@ -13,6 +14,7 @@ impl Config {
             recursive: false,
             full_recursive: false,
             count: false,
+            error: false,
         }
     }
 }

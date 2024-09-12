@@ -18,3 +18,5 @@
   - Append line numbers to the output.
 - -c
   - Instead of printing the found matches print the number of found matches.
+- -e
+  - Show errors thrown.

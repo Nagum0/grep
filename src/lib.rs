@@ -38,6 +38,7 @@ impl Grep {
                     "-rf" => grep.config.full_recursive = true,
                     "-n" => grep.config.lines = true,
                     "-c" => grep.config.count = true,
+                    "-e" => grep.config.error = true,
                     _ => return Err(GrepError::OptionError(arg)),
                 }
                 continue;
@@ -63,23 +64,35 @@ impl Grep {
 
     /// Main entry point of grep. Error handling happens here too.
     pub fn grep(&self) {
-        // -rf or -r flags are set:
+        // -rf or -r flags are set (recusrive mode):
         if self.config.full_recursive || self.config.recursive {
             match self.recursive() {
                 Ok(_) => {}
                 Err(e) => println!("{e}"),
             }
-        } else {
+        }
+        // Single file mode:
+        else {
             // -c flag is set:
             if self.config.count {
                 match utils::count_matches(&self.path, &self.pattern) {
                     Ok(count) => println!("{count}"),
-                    Err(e) => println!("{e}"),
+                    Err(e) => {
+                        // -e flag is set:
+                        if self.config.error {
+                            println!("{e}")
+                        }
+                    }
                 }
             } else {
                 match utils::get_matches(&self.path, &self.pattern, self.config.lines, false) {
                     Ok(_) => {}
-                    Err(e) => println!("{e}"),
+                    Err(e) => {
+                        // -e flag is set show the error:
+                        if self.config.error {
+                            println!("{e}");
+                        }
+                    }
                 }
             }
         }
@@ -98,7 +111,10 @@ impl Grep {
                     match utils::count_matches(&file_path, &self.pattern) {
                         Ok(matches) => Ok(acc + matches),
                         Err(e) => {
-                            println!("{e}");
+                            // -e flag is set:
+                            if self.config.error {
+                                println!("{e}");
+                            }
                             Ok(acc)
                         }
                     }
@@ -108,7 +124,11 @@ impl Grep {
             for file_path in file_paths {
                 match utils::get_matches(&file_path, &self.pattern, self.config.lines, true) {
                     Ok(_) => {}
-                    Err(e) => println!("{e}"),
+                    Err(e) => {
+                        if self.config.error {
+                            println!("{e}");
+                        }
+                    }
                 }
             }
         }
