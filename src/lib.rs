@@ -1,4 +1,4 @@
-use std::{env, path::PathBuf};
+use std::{env, path::PathBuf, process::exit};
 
 use config::Config;
 use error::GrepError;
@@ -39,6 +39,10 @@ impl Grep {
                     "-n" => grep.config.lines = true,
                     "-c" => grep.config.count = true,
                     "-e" => grep.config.error = true,
+                    "--help" => {
+                        utils::help();
+                        exit(0);
+                    }
                     _ => return Err(GrepError::OptionError(arg)),
                 }
                 continue;

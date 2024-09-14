@@ -125,3 +125,18 @@ fn read_file(file_path: &PathBuf) -> Result<String, GrepError> {
         _ => GrepError::FileError(error_file_path_as_string, "Unknown file error"),
     })?)
 }
+
+pub fn help() {
+    println!("Usage:\n\n  grep [OPTIONS...] <pattern> <path>");
+    println!("  grep <pattern> [OPTIONS...] <path>");
+    println!("  grep <pattern> <path> [OPTIONS...]");
+    println!("");
+    println!("  -r\n\tRecusively search the given directory for the given pattern.");
+    println!(
+        "  -rf\n\tRecusively search the given directory and subdirectories for the given pattern."
+    );
+    println!("  -n\n\tAppend line numbers to the output.");
+    println!("  -c\n\tInstead of printing the found matches print the number of found matches.");
+    println!("  -e\n\tShow errors thrown.");
+    println!("  --help\n\tPrint usage information.");
+}
